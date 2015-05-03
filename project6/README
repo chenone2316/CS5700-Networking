@@ -1,0 +1,134 @@
+++++++++++++++++++++++++++++++++++++++++++++++++++++
++Task 1: What are your apps doing with the network?+
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Highlevel Approach:
+In this task, I have to count the apps that i used every day. I try to filter DNS information from traffic tcpdump trace files. I will keep recording
+the domain names requested from my iphone and determine the org name by parsing the domain names. For example, if there is a parsed record: 
+uu.qq.com, i will assume qq app has contacted with the uu.qq.com request. Then, I will try to record ten apps or orgs that i used at the most time, and 
+count the times of contacted sites. But this method has a weaknesses. Sometimes, many apps will be developed by the same company. Like, Tencent has apps
+like qq, wechat and qq news. They all send a dns request which ends with "qq.com". However, it should be corresponded to qq.com, wechat.qq.com and news.qq.com.
+We can not determine the accurate app on our phone by looking through "qq.com" only.
+
+Question 1: How many sites are contacted by each app that you use?
+ANS: I developed a program called count_app.py to count the how many site are contacted by each app in my iphone. The statistic data is as follow.
+I used the data on 18th April, 2015.
+
+google: 715
+amazon: 3
+apple: 1317
+qq, wechat, news: 52
+163 net: 2
+netease: 6
+yahoo: 2
+linkedin: 0
+itunes: 18
+icloud: 56
+
+
+Question 2: Does that traffic seem legitimate?
+I do not see any legitimate traffic. I deem that it is because I have not used many apps on that day, so the I do not encounter the exceptional traffic.
+
+Question 3: Is there anything surprising in your data?
+There are no anything surprising thing in my data. It is okay and normal. 
+
+++++++++++++++++++++++
++Task 2: Identify PII+
+++++++++++++++++++++++
+
+I have tried to modify the grepForStuff.sh file by adding some personal information, like my qq username, my password, my account and my IMEI. And when I test 
+the data on 14th April, 2015. I found most of the PII is leaked from qq username mostly. Here is an example.
+
+App Name: QQ
+ 
+PII Type: user name/user id
+ 
+Network Commands
+tcpdump-shifuxu-Apr-14-2015-01-48-1428976099-172.31.42.152-10.11.1.19-172.56.18.154.pcap.enc.clr | grep -i XXXXXXXXX httpdata.txt | sort | uniq -c
+ 
+Network Trace
+XXXXXXXXXV..~aD..D).!..5.4
+XXXXXXXXX...z..1. ... .v5l.......
+XXXXXXXXX.@.....6...!./w......
+XXXXXXXXX:T.}..nEl9..i...@.......
+XXXXXXXXXP...G.,.R........*G6.
+XXXXXXXXX/..o.ao^.]K..\..O.f.r
+XXXXXXXXX..."...1A......p....J^ ....
+XXXXXXXXX.8....S5PD..........
+XXXXXXXXX(8!.s.GR.......+..+..
+XXXXXXXXX..f..9q....K.a...<..P
+XXXXXXXXXiK..u4....1.....{.-.^
+XXXXXXXXX...JaS.6]..q.^J..5...
+XXXXXXXXX..m..C.:.M... ....+......
+XXXXXXXXX_,.n.7....s.j...x...B
+XXXXXXXXX..^N.+Nt4.j....w...U.
+2..@1214W..qMT,..............
+XXXXXXXXX...=Qs.....>=3.E.1.0.
+XXXXXXXXX..=,|...r.......TR..r
+XXXXXXXXX.T|.b...I...7Y2...q..
+XXXXXXXXXtq..+......N...h9.......
+XXXXXXXXX.U6xU...#....S24{z..:...
+XXXXXXXXX..WH!..D$...... R8.do
+XXXXXXXXX.wx.......W...G.dH.1.
+XXXXXXXXX..........z....51.N..
+XXXXXXXXX*..;.{..Z...+......78
+XXXXXXXXX.z.c.k7...N.#....f...
+XXXXXXXXX....z.`.'..|Ll;.C_.x.
+XXXXXXXXX....z.`.'..|Ll;.C_.x.
+XXXXXXXXX...r.wJdI5......\..^x
+XXXXXXXXX.....)..e4.Z.{.W{._..
+XXXXXXXXX..<5_.!.......S....~.
+XXXXXXXXX..m...?..7.k.......
+XXXXXXXXX......_Bgyv..j......
+XXXXXXXXX~<...e.....JJ^.@U..U.
+XXXXXXXXXf.>p.2V.;.../.$.ok...
+XXXXXXXXX.....e........x....@.
+XXXXXXXXX*.]....N...d9.."..~.S
+..x|%...S..a:4..m..'.........
+XXXXXXXXX.kQ.Br..UxooT.....#..
+XXXXXXXXX.&........q.......^,.
+.W.P'K146Sf..n.3h.....q......
+XXXXXXXXX..... ...nmr.?......
+XXXXXXXXX...$......._F.}.."..
+XXXXXXXXX...:&&.\j .Xi...R..".
+XXXXXXXXX.&.`.'7.e.....~%.]...
+XXXXXXXXX.....^....e.n.V.o.[w
+XXXXXXXXXfT.....4.....e".t..."...
+XXXXXXXXX.A..Z..02.(..~.....R.
+XXXXXXXXX..k..1.Vi..Q..]0.l...
+XXXXXXXXXI...<................
+XXXXXXXXX...2..1.............C
+XXXXXXXXXP...-3..zWL.....u...Z
+XXXXXXXXX.5./..H...M)=W#..?..P
+XXXXXXXXX..I.7/S..
+XXXXXXXXXW&..Fmc>\b...b%x.m^..
+...X.X.`Q.x.'....../.........
+XXXXXXXXX...4~...cD`.jP..6$o..
+XXXXXXXXX....#..%.1~.......+$l
+XXXXXXXXX..F.7.o/S...n.=hW..E.
+XXXXXXXXXV.'.D..'.*...nK@..]W0.............
+XXXXXXXXXe`..^.i...w.........
+XXXXXXXXX...P......I!..]6A3...
+XXXXXXXXX.?.u...I....7c......s
+XXXXXXXXX.S.z..'.............
+XXXXXXXXX.w...+.....z...ci%..a
+XXXXXXXXX"mY,<J".M.....q......
+XXXXXXXXX..k..1.Vi..Q..]0.l...
+XXXXXXXXX.....cQ.~o..`.......1
+
+
+The wired thing is that, I found the PII leak from credit. But it does not match with my creid card number or debit card number. The instance is below.It think 
+it is because the number below is some random combination from traffic, but they just match the regular expression in the credit card number pii check part.
+
+tcpdump-shifuxu-Apr-14-2015-22-52-1429051971-172.31.42.152-10.11.1.19-129.10.18.88.pcap.enc.clr
+->Looking for credit card numbers
+      1 4081844303419
+      1 4438896267276
+      1 40818443034195
+      1 71729748507328
+      1 74438896267276
+
+++++++++++++++++++++++++++++++++++++++++
++Task 3: Fill out surveys and label PII+
+++++++++++++++++++++++++++++++++++++++++
+I have finished the survey and labeled the PII on my phone
